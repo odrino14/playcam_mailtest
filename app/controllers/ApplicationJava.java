@@ -7,12 +7,15 @@ import play.libs.mailer.Email;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+
 import javax.inject.Inject;
 import java.io.File;
 
 public class ApplicationJava extends Controller {
 
     private final MailerClient mailer;
+
+    String id ="";
 
     @Inject
     public ApplicationJava(MailerClient mailer) {
@@ -27,8 +30,13 @@ public class ApplicationJava extends Controller {
                 .addTo("Miss TO <audrando@yahoo.fr>")
                 .setBodyText("du hast dich registried")
                 .setBodyHtml("<html><body><p>An <b>html</b> message with cid <img src=\"cid:" + cid + "\"></p></body></html>");
-        String id = mailer.send(email);
-        return ok("Email " + id + " sent!");
+        try {
 
+            id = mailer.send(email);
+            return ok("Email " + id + " sent!");
+        }catch(Exception e){
+            System.out.println("No Mail send! " + e.toString());
+            throw e;
+        }
     }
 }
